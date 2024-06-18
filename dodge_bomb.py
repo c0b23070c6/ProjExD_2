@@ -28,6 +28,36 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     return yoko, tate
 
 
+def game_over(screen: int) -> None:
+    """
+    ゲームオーバー画面
+    画面をブラックアウトし，
+    泣いているこうかとん画像"fig/3.png"と
+    「Game Over」の文字列を
+    5秒間表示させる関数を実装する
+    """
+    # 背景の描画
+    rect = pg.Surface((WIDTH, HEIGHT), pg.SRCALPHA)
+    rect.set_alpha(200)
+    pg.draw.rect(rect, (0, 0, 0, 128), (0, 0, WIDTH, HEIGHT))
+    screen.blit(rect, (0, 0))
+    #テキストの描画
+    font = pg.font.Font(None, 80)
+    text = font.render("Game Over", True, (255, 255, 255))
+    text_rect = text.get_rect()
+    text_rect.center = (WIDTH // 2, HEIGHT //2)
+    screen.blit(text, text_rect)
+    # こうかとんの描画
+    cry_kk_img = pg.transform.rotozoom(pg.image.load("fig/8.png"), 0, 2.0)
+    cry_kk_rct = cry_kk_img.get_rect()
+    cry_kk_rct.center = (WIDTH // 4, HEIGHT //2) # 左のこうかとん
+    screen.blit(cry_kk_img, cry_kk_rct)
+    cry_kk_rct.center = (WIDTH // 4 + WIDTH // 2, HEIGHT //2) #右のこうかとん
+    screen.blit(cry_kk_img, cry_kk_rct)
+    pg.display.update()
+    pg.time.wait(5000) # 5秒停止
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -43,40 +73,14 @@ def main():
     bb_img.set_colorkey((0, 0, 0))
     clock = pg.time.Clock()
     tmr = 0
+
+
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return
         if kk_rct.colliderect(bb_rct):# 衝突判定
-            def game_over() -> None:
-                """
-                ゲームオーバー画面
-                画面をブラックアウトし，
-                泣いているこうかとん画像"fig/3.png"と
-                「Game Over」の文字列を
-                5秒間表示させる関数を実装する
-                """
-                # 背景の描画
-                rect = pg.Surface((WIDTH, HEIGHT), pg.SRCALPHA)
-                rect.set_alpha(200)
-                pg.draw.rect(rect, (0, 0, 0, 128), (0, 0, WIDTH, HEIGHT))
-                screen.blit(rect, (0, 0))
-                #テキストの描画
-                font = pg.font.Font(None, 80)
-                text = font.render("Game Over", True, (255, 255, 255))
-                text_rect = text.get_rect()
-                text_rect.center = (WIDTH // 2, HEIGHT //2)
-                screen.blit(text, text_rect)
-                # こうかとんの描画
-                cry_kk_img = pg.transform.rotozoom(pg.image.load("fig/8.png"), 0, 2.0)
-                cry_kk_rct = cry_kk_img.get_rect()
-                cry_kk_rct.center = (WIDTH // 4, HEIGHT //2) # 左のこうかとん
-                screen.blit(cry_kk_img, cry_kk_rct)
-                cry_kk_rct.center = (WIDTH // 4 + WIDTH // 2, HEIGHT //2) #右のこうかとん
-                screen.blit(cry_kk_img, cry_kk_rct)
-                pg.display.update()
-                pg.time.wait(5000) # 5秒停止
-            game_over()
+            game_over(screen)
             break
         screen.blit(bg_img, [0, 0])
 
