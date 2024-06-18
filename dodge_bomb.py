@@ -75,7 +75,7 @@ def main():
     tmr = 0
 
 
-    while True:
+    while True: # 改行2行開ける
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return
@@ -83,7 +83,6 @@ def main():
             game_over(screen)
             break
         screen.blit(bg_img, [0, 0])
-
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
         for k, v in DELTA.items():
